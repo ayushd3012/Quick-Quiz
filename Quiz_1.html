@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz with Scoring</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: lightslategray;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: red;
+    }
+
+    .question {
+      margin: 20px 0;
+    }
+
+    .question p {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+
+    input[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background: #45a049;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      color:  #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h2>Quick Quiz</h2>
+    <form id="quizForm">
+      <div class="question">
+        <p>1. What does HTML stand for?</p>
+        <label><input type="radio" name="q1" value="correct"> Hyper Text Markup Language</label>
+        <label><input type="radio" name="q1" value="wrong"> Home Tool Markup Language</label>
+        <label><input type="radio" name="q1" value="wrong"> Hyperlinks and Text Markup Language</label>
+      </div>
+
+      <div class="question">
+        <p>2. Which CSS property controls text size?</p>
+        <label><input type="radio" name="q2" value="wrong"> font-style</label>
+        <label><input type="radio" name="q2" value="wrong"> text-size</label>
+        <label><input type="radio" name="q2" value="correct"> font-size</label>
+      </div>
+
+      <div class="question">
+        <p>3. Which tag is used to create a hyperlink in HTML?</p>
+        <label><input type="radio" name="q3" value="wrong"> &lt;link&gt;</label>
+        <label><input type="radio" name="q3" value="correct"> &lt;a&gt;</label>
+        <label><input type="radio" name="q3" value="wrong"> &lt;href&gt;</label>
+      </div>
+
+      <div>
+        <p>4. What does CSS stand for?</p>
+        <label><input type="radio" name="q4" value="correct"> Cascading Style Sheets</label>
+        <label><input type="radio" name="q4" value="wrong"> Computer Style Sheets</label>
+        <label><input type="radio" name="q4" value="wrong"> Creative Style Sheets</label>
+      </div>
+
+      <div>
+        <p>5. Which HTML element is used to specify a footer for a document or section?</p>
+        <label><input type="radio" name="q5" value="wrong"> &lt;bottom&gt;</label>
+        <label><input type="radio" name="q5" value="correct"> &lt;footer&gt;</label>
+        <label><input type="radio" name="q5" value="wrong"> &lt;section&gt;</label>
+      </div>
+
+      <div>
+        <p>6. Which property is used to change the background color in CSS?</p>
+        <label><input type="radio" name="q6" value="correct"> background-color</label>
+        <label><input type="radio" name="q6" value="wrong"> bg-color</label>
+        <label><input type="radio" name="q6" value="wrong"> color-background</label>
+      </div>
+
+      <div>
+        <p>7. Which HTML tag is used to define an unordered list?</p>
+        <label><input type="radio" name="q7" value="wrong"> &lt;ul&gt;</label>
+        <label><input type="radio" name="q7" value="correct"> &lt;ul&gt;</label>
+        <label><input type="radio" name="q7" value="wrong"> &lt;ol&gt;</label>
+      </div>
+
+      <div>
+        <p>8. Which CSS property is used to change the text color?</p>
+        <label><input type="radio" name="q8" value="correct"> color</label>
+        <label><input type="radio" name="q8" value="wrong"> text-color</label>
+        <label><input type="radio" name="q8" value="wrong"> font-color</label>
+      </div>
+
+      <div>
+        <p>9. Which HTML element is used to define a table?</p>
+        <label><input type="radio" name="q9" value="wrong"> &lt;table&gt;</label>
+        <label><input type="radio" name="q9" value="correct"> &lt;table&gt;</label>
+        <label><input type="radio" name="q9" value="wrong"> &lt;tab&gt;</label>
+      </div>
+
+      <div>
+        <p>10. Which CSS property is used to change the font of an element?</p>
+        <label><input type="radio" name="q10" value="correct"> font-family</label>
+        <label><input type="radio" name="q10" value="wrong"> font-style</label>
+        <label><input type="radio" name="q10" value="wrong"> text-font</label>
+      </div>
+
+      <input type="submit" value="Submit Quiz">
+    </form>
+    <div id="result"></div>
+  </div>
+
+
+  <script>
+    document.getElementById("quizForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // prevent page reload
+
+      let score = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let unansweredCount = 0;
+      
+      const answers = document.querySelectorAll("input[type=radio]:checked");
+      const totalQuestions = 10;
+
+      answers.forEach(answer => {
+        if (answer.value === "correct") {
+          score += 4;
+          correctCount++;
+        } else {
+          score -= 1;
+          wrongCount++;
+        }
+      });
+
+      // Calculate unanswered questions
+      unansweredCount = totalQuestions - answers.length;
+
+      let resultHTML = "<p><strong>Your Score: " + score + "</strong></p>";
+      resultHTML += "<p>Correct Answers: " + correctCount + "</p>";
+      resultHTML += "<p>Wrong Answers: " + wrongCount + "</p>";
+      resultHTML += "<p>Unattemted Questions: " + unansweredCount + "</p>";
+
+      document.getElementById("result").innerHTML = resultHTML;
+    });
+  </script>
+</body>
+</html>
